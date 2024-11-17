@@ -7,15 +7,17 @@
 # General application configuration
 import Config
 
+
 config :slax, ecto_repos: [Slax.Repo],
   username: System.get_env("DATABASE_USERNAME") || "set-your-username-in-dotenv-file",
   password: System.get_env("DATABASE_PASSWORD") || "set-your-password-in-dotenv-file",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
-  database: System.get_env("DATABASE_NAME") || "set-your-dbname-in-dotenv-file",
+  database: System.get_env("DATABASE_NAME") || "",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: String.to_integer(System.get_env("DATABASE_POOL_SIZE") || "1"),
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ecto_repos: [Slax.Repo]
 
 # Configures the endpoint
 config :slax, SlaxWeb.Endpoint,
