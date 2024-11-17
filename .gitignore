@@ -35,3 +35,6 @@ slax-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Any sensitive configuration/password/environment variables are ignored.
+.env
+

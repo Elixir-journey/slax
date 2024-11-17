@@ -20,6 +20,23 @@ if System.get_env("PHX_SERVER") do
   config :slax, SlaxWeb.Endpoint, server: true
 end
 
+if File.exists?(".env") do
+  IO.puts("Loading .env file")
+
+  # Load the variables from the .env file
+  Dotenv.load()
+  |> Map.get(:values)
+  |> Enum.each(fn {key, value} ->
+    System.put_env(key, value)
+  end)
+end
+
+IO.inspect(System.get_env("DATABASE_USERNAME"), label: "DATABASE_USERNAME")
+IO.inspect(System.get_env("DATABASE_PASSWORD"), label: "DATABASE_PASSWORD")
+IO.inspect(System.get_env("DATABASE_NAME"), label: "DATABASE_NAME")
+IO.inspect(System.get_env("DATABASE_HOST"), label: "DATABASE_HOST")
+IO.inspect(System.get_env("DATABASE_PORT"), label: "DATABASE_PORT")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
