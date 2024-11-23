@@ -20,6 +20,9 @@ jobs:
           POSTGRES_DB: ${{ secrets.DB_NAME }}
         ports:
           - 5432:5432
+    env:
+      MIX_ENV: test
+      DATABASE_URL: ecto://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v4
@@ -60,8 +63,6 @@ jobs:
 
       - name: Run Dialyzer for type checking
         run: mix dialyzer
-        env:
-          MIX_ENV: dev
 
       - name: Run tests
         run: mix test
