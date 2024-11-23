@@ -1,6 +1,8 @@
 defmodule SlaxWeb.Live.Helpers.ChatRoom do
   alias SlaxWeb.Live.Entities.ChatRoom
 
+  @initial_users_in_room 0
+
   @moduledoc """
   A helper module for managing chat rooms.
 
@@ -41,13 +43,27 @@ defmodule SlaxWeb.Live.Helpers.ChatRoom do
     room_id = Enum.random(0..max_rooms_supported)
     room_name = generate_room_name_random(room_id)
 
-    {:ok, %ChatRoom{room_id: room_id, room_name: room_name}}
+    {:ok, %ChatRoom{room_id: room_id, room_name: room_name, user_connected_count: @initial_users_in_room}}
   end
 
   # Error handling for invalid inputs (non-numbers or non-positive numbers)
   def build_chat_room(_) do
     {:error, "Invalid input: max_rooms_supported must be a positive number"}
   end
+
+  @doc """
+  Checks if there are any users connected to the chat room.
+
+  ## Examples
+
+      iex> SlaxWeb.Live.Helpers.ChatRoom.anyone_connected?(%ChatRoom{user_connected_count: 5})
+      true
+
+      iex> SlaxWeb.Live.Helpers.ChatRoom.anyone_connected?(%ChatRoom{user_connected_count: 0})
+      false
+
+  """
+  def anyone_connected?(chat_room), do: chat_room.user_connected_count > 0
 
   defp generate_room_name_random(room_id) do
     marvel_heroes_names = ["Iron man", "Spider-man", "Hawkeye", "Nick Furry", "Nebula", "Ant-man", "Phoenix", "Wanda"]
