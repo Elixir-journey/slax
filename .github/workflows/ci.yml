@@ -64,5 +64,8 @@ jobs:
       - name: Run Dialyzer for type checking
         run: mix dialyzer
 
+      - name: Set up the database
+        run: mix ecto.migrate
+
       - name: Run tests
         run: mix test
