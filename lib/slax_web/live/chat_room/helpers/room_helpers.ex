@@ -1,5 +1,5 @@
-defmodule SlaxWeb.Live.Helpers.ChatRoom do
-  alias SlaxWeb.Live.Entities.ChatRoom
+defmodule SlaxWeb.Live.ChatRoom.Helpers.Room do
+  alias SlaxWeb.Live.ChatRoom.Entities.Room
 
   @initial_users_in_room 0
 
@@ -16,7 +16,7 @@ defmodule SlaxWeb.Live.Helpers.ChatRoom do
   It then generates a random room name by picking a superhero from a predefined list of names
   and appending the room ID to it.
 
-  The function returns a `%ChatRoom{}` struct containing the `room_id` and `room_name`.
+  The function returns a `%Room{}` struct containing the `room_id` and `room_name`.
 
   ## Parameters
 
@@ -26,16 +26,16 @@ defmodule SlaxWeb.Live.Helpers.ChatRoom do
 
   ## Returns
 
-    - `{:ok, %ChatRoom{}}`: A tuple containing the successfully created chat room struct.
+    - `{:ok, %Room{}}`: A tuple containing the successfully created chat room struct.
     - `{:error, reason}`: A tuple with an error message if the `max_rooms_supported` is invalid
       (not a positive number).
 
   ## Examples
 
-      iex> SlaxWeb.Live.Helpers.ChatRoom.build_chat_room(1000)
-      {:ok, %ChatRoom{room_id: 4523, room_name: "Iron man - 4523"}}
+      iex> SlaxWeb.Live.ChatRoom.Helpers.Room.build_chat_room(1000)
+      {:ok, %Room{room_id: 4523, room_name: "Iron man - 4523"}}
 
-      iex> SlaxWeb.Live.Helpers.ChatRoom.build_chat_room(-1)
+      iex> SlaxWeb.Live.ChatRoom.Helpers.Room.build_chat_room(-1)
       {:error, "Invalid input: max_rooms_supported must be a positive number"}
 
   """
@@ -43,7 +43,7 @@ defmodule SlaxWeb.Live.Helpers.ChatRoom do
     room_id = Enum.random(0..max_rooms_supported)
     room_name = generate_room_name_random(room_id)
 
-    {:ok, %ChatRoom{room_id: room_id, room_name: room_name, user_connected_count: @initial_users_in_room}}
+    {:ok, %Room{room_id: room_id, room_name: room_name, user_connected_count: @initial_users_in_room}}
   end
 
   # Error handling for invalid inputs (non-numbers or non-positive numbers)
@@ -56,10 +56,10 @@ defmodule SlaxWeb.Live.Helpers.ChatRoom do
 
   ## Examples
 
-      iex> SlaxWeb.Live.Helpers.ChatRoom.anyone_connected?(%ChatRoom{user_connected_count: 5})
+      iex> SlaxWeb.Live.ChatRoom.Helpers.Room.anyone_connected?(%ChatRoom{user_connected_count: 5})
       true
 
-      iex> SlaxWeb.Live.Helpers.ChatRoom.anyone_connected?(%ChatRoom{user_connected_count: 0})
+      iex> SlaxWeb.Live.ChatRoom.Helpers.Room.anyone_connected?(%ChatRoom{user_connected_count: 0})
       false
 
   """

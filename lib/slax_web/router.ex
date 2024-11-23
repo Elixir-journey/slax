@@ -17,7 +17,7 @@ defmodule SlaxWeb.Router do
   scope "/", SlaxWeb do
     pipe_through :browser
 
-    live "/", Live.ChatRoom
+    live "/", Live.ChatRoom.Page
   end
 
   # Other scopes may use custom stacks.

@@ -1,12 +1,12 @@
-defmodule SlaxWeb.Live.ChatRoom do
+defmodule SlaxWeb.Live.ChatRoom.Page do
   use SlaxWeb, :live_view
 
-  alias SlaxWeb.Live.Helpers.ChatRoom
+  alias SlaxWeb.Live.ChatRoom.Helpers.Room
 
   @max_number_of_rooms 10_000_000
 
   def render(assigns) do
-    case ChatRoom.build_chat_room(@max_number_of_rooms) do
+    case Room.build_chat_room(@max_number_of_rooms) do
       {:ok, chat_room_entity} ->
         # Properly assign chat_room_entity to assigns
         assigns = assign(assigns, :chat_room_entity, chat_room_entity)
@@ -17,7 +17,7 @@ defmodule SlaxWeb.Live.ChatRoom do
             <%= "Welcome to this awesome chat room! This is the room ID: #{@chat_room_entity.room_name}" %>
           </div>
 
-          <%= if ChatRoom.anyone_connected?(@chat_room_entity) do %>
+          <%= if Room.anyone_connected?(@chat_room_entity) do %>
             <div>
               <%= "You are among #{@chat_room_entity.user_connected_count - 1} users connected" %>
             </div>
