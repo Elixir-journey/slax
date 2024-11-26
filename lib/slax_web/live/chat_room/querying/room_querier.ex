@@ -8,6 +8,7 @@ defmodule SlaxWeb.Live.ChatRoom.Querying.RoomQueries do
 
   @paginated_results_limit 100
 
+  @spec get_first_room() :: any()
   def get_first_room(opts \\ []) do
     Room
     |> apply_limit(opts)
