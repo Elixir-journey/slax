@@ -1,4 +1,4 @@
-defmodule SlaxWeb.Live.ChatRoom.Querying.RoomQueries do
+defmodule Slax.Chat.Room.Query.ChatRoom do
   import Ecto.Query
 
   alias Slax.Repo
