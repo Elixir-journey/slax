@@ -1,7 +1,7 @@
 defmodule SlaxWeb.Live.ChatRoom.Page do
   use SlaxWeb, :live_view
 
-  alias SlaxWeb.Live.ChatRoom.{Querying.RoomQueries, Helpers.Room}
+  alias Slax.Chat.Room.Query.ChatRoom
 
   # When a LiveView page is opened, the first thing that gets done is mounting the page. It's the LiveView entrypoint.
   # mount/3 is called 2x; once of the page loads and then again to establish the live websocket.
@@ -10,7 +10,7 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
   # Source: https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:mount/3
 
   def mount(_params, _session, socket) do
-    slax_chat_room = RoomQueries.get_first_room()
+    slax_chat_room = ChatRoom.get_first_room()
 
     # Keep the :slax_room key
     socket = assign(socket, :slax_room, slax_chat_room)
