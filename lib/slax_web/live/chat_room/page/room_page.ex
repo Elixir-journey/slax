@@ -1,8 +1,7 @@
 defmodule SlaxWeb.Live.ChatRoom.Page do
   use SlaxWeb, :live_view
 
-  alias SlaxWeb.Live.ChatRoom.{Querying.RoomQueries, Helpers.Room}
-
+  alias Slax.Chat.Room.Domain.RoomName
   # When a LiveView page is opened, the first thing that gets done is mounting the page. It's the LiveView entrypoint.
   # mount/3 is called 2x; once of the page loads and then again to establish the live websocket.
   # The live websocket is used to make a point of contact between the browser and the backend server.

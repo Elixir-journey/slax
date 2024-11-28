@@ -1,15 +1,11 @@
-defmodule SlaxWeb.Live.ChatRoom.Helpers.Room do
-  alias Slax.Repo
-  alias Slax.Chat.Room
-
-  @initial_users_in_room 0
-  @max_allowed_rooms 10_000_000
-
+defmodule Slax.Chat.Room.Domain.RoomName do
   @moduledoc """
   A helper module for managing chat rooms.
 
   This module provides functions for generating and managing a chat room.
   """
+
+  @max_allowed_rooms 10_000_000
 
   def generate_room_name_random() do
     marvel_heroes_names = ["Iron man", "Spider-man", "Hawkeye", "Nick Furry", "Nebula", "Ant-man", "Phoenix", "Wanda"]
