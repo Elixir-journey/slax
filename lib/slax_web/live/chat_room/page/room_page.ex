@@ -1,21 +1,30 @@
 defmodule SlaxWeb.Live.ChatRoom.Page do
   use SlaxWeb, :live_view
 
+  alias Slax.Chat.Room
   alias Slax.Chat.Room.Query.ChatRoom
+  alias SlaxWeb.LiveViewHelpers, as: Helpers
 
-  # When a LiveView page is opened, the first thing that gets done is mounting the page. It's the LiveView entrypoint.
-  # mount/3 is called 2x; once of the page loads and then again to establish the live websocket.
-  # The live websocket is used to make a point of contact between the browser and the backend server.
-  # If it isn't defined on a page, Phoenix will fall back to a given default behavior.
-  # Source: https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:mount/3
+  @default_chat_room %Room{name: "Unknown", topic: "No topic"}
 
+  @spec mount(any(), any(), any()) :: {:ok, any()}
+  @doc """
+  LiveView entrypoint, called twice: once on initial page load and again on websocket connection.
+
+  - Fetches the first chat room and assigns it to `:slax_room`.
+  """
   def mount(_params, _session, socket) do
-    slax_chat_room = ChatRoom.get_first_room()
+    socket
+    |> assign_chat_room()
+    |> Helpers.ok()
+  end
 
-    # Keep the :slax_room key
-    socket = assign(socket, :slax_room, slax_chat_room)
-
-    {:ok, socket}
+  defp assign_chat_room(socket) do
+    with room when not is_nil(room) <- ChatRoom.get_first_room() do
+      assign(socket, :slax_room, room)
+    else
+      _ -> assign(socket, :slax_room, @default_chat_room)
+    end
   end
 
   def render(assigns) do
