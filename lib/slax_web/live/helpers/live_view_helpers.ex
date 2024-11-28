@@ -18,6 +18,17 @@ defmodule SlaxWeb.LiveViewHelpers do
   def ok(socket), do: {:ok, socket}
 
   @doc """
+  Returns an `{:noreply, socket}` tuple for easier use in pipelines.
+
+  ## Examples
+
+      iex> SlaxWeb.LiveViewHelpers.no_reply(socket)
+      {:noreply, socket}
+
+  """
+  def no_reply(socket), do: {:noreply, socket}
+
+  @doc """
   Runs the given function if the LiveView socket is connected. Otherwise, returns the socket unchanged.
 
   ## Examples

@@ -13,10 +13,18 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
 
   - Fetches the first chat room and assigns it to `:slax_room`.
   """
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     socket
+    |> assign(is_topic_hidden: false)
     |> assign_chat_room()
     |> Helpers.ok()
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("toggle-topic", _params, socket) do
+    {:noreply,
+      socket |> assign(is_topic_hidden: !socket.assigns.is_topic_hidden)}
   end
 
   defp assign_chat_room(socket) do
@@ -27,6 +35,7 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
     end
   end
 
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <div class="flex flex-col flex-grow shadow-lg">
@@ -36,8 +45,13 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
             #room-name
             <%= @slax_room.name %>
           </h1>
-          <div class="text-xs leading-none h-3.5">Placeholder topic</div>
-          <div class="text-xs leading-none h-3.5"><%= @slax_room.topic %></div>
+          <div class="text-xs leading-none h-3.5" phx-click="toggle-topic">
+            <%= if @is_topic_hidden do %>
+              <span class="text-slate-600">[Topic hidden]</span>
+            <% else %>
+              <%= @slax_room.topic %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
