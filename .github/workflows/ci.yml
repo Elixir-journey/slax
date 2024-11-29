@@ -1,86 +1,86 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
+    build:
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:15
+                env:
+                    POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+                    POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                    POSTGRES_DB: ${{ secrets.DB_NAME }}
+                ports:
+                    - 5432:5432
         env:
-          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-        ports:
-          - 5432:5432
-    env:
-      MIX_ENV: test
-      DATABASE_URL: ecto://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}
-    steps:
-      # Check out the code
-      - name: Check out the code
-        uses: actions/checkout@v4
+            MIX_ENV: test
+            DATABASE_URL: ecto://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}
+        steps:
+            # Check out the code
+            - name: Check out the code
+              uses: actions/checkout@v4
 
-      # Set up Elixir and Erlang/OTP
-      - name: Set up Elixir
-        uses: erlef/setup-beam@v1
-        with:
-          elixir-version: "1.14.5"
-          otp-version: "25.3"
+            # Set up Elixir and Erlang/OTP
+            - name: Set up Elixir
+              uses: erlef/setup-beam@v1
+              with:
+                  elixir-version: "1.17"
+                  otp-version: "27.1.2"
 
-      # Cache dependencies
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-mix-
+            # Cache dependencies
+            - name: Cache dependencies
+              uses: actions/cache@v3
+              with:
+                  path: deps
+                  key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-mix-
 
-      # Cache Dialyzer PLT files
-      - name: Cache Dialyzer PLT
-        uses: actions/cache@v3
-        with:
-          path: _build/test/*.plt
-          key: ${{ runner.os }}-dialyzer-plt-${{ hashFiles('**/mix.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-dialyzer-plt-
+            # Cache Dialyzer PLT files
+            - name: Cache Dialyzer PLT
+              uses: actions/cache@v3
+              with:
+                  path: _build/test/*.plt
+                  key: ${{ runner.os }}-dialyzer-plt-${{ hashFiles('**/mix.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-dialyzer-plt-
 
-      # Install dependencies
-      - name: Install dependencies
-        run: mix deps.get
+            # Install dependencies
+            - name: Install dependencies
+              run: mix deps.get
 
-      # Run formatter check
-      - name: Check formatting
-        run: mix format --check-formatted
+            # Run formatter check
+            - name: Check formatting
+              run: mix format --check-formatted
 
-      # Run Credo for linting
-      - name: Run Credo
-        run: mix credo
+            # Run Credo for linting
+            - name: Run Credo
+              run: mix credo
 
-      # Run Dialyzer for type checking
-      - name: Run Dialyzer
-        run: mix dialyzer
+            # Run Dialyzer for type checking
+            - name: Run Dialyzer
+              run: mix dialyzer
 
-      # Set up the database
-      - name: Set up the database
-        run: mix ecto.create && mix ecto.migrate
+            # Set up the database
+            - name: Set up the database
+              run: mix ecto.create && mix ecto.migrate
 
-      # Compile dependencies
-      - name: Compile dependencies
-        run: mix deps.compile
+            # Compile dependencies
+            - name: Compile dependencies
+              run: mix deps.compile
 
-      # Compile the application
-      - name: Compile application
-        run: mix compile
+            # Compile the application
+            - name: Compile application
+              run: mix compile
 
-      # Run tests
-      - name: Run tests
-        run: mix test
+            # Run tests
+            - name: Run tests
+              run: mix test
