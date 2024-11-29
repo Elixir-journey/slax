@@ -1,8 +1,8 @@
 defmodule SlaxWeb.PageControllerTest do
   use SlaxWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  test "GET / renders the correct default room name", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    assert html_response(conn, 200) =~ "#room-name Unknown"
   end
 end
