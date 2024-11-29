@@ -24,21 +24,18 @@ jobs:
       MIX_ENV: test
       DATABASE_URL: ecto://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}
     steps:
+      # Check out the code
       - name: Check out the code
         uses: actions/checkout@v4
 
+      # Set up Elixir and Erlang/OTP
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.17"
-          otp-version: "27.1.2"
+          elixir-version: "1.14.5"
+          otp-version: "25.3"
 
-      - name: Install dependencies
-        run: mix deps.get
-
-        # If the key doesn’t change, the cache will persist as long as it’s used within a 7-day period.
-        # If the cache isn’t accessed within 7 days, GitHub will expire it, even if the key hasn’t changed.
-
+      # Cache dependencies
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -47,25 +44,43 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mix-
 
+      # Cache Dialyzer PLT files
       - name: Cache Dialyzer PLT
         uses: actions/cache@v3
         with:
-          path: _build/dev/*.plt
+          path: _build/test/*.plt
           key: ${{ runner.os }}-dialyzer-plt-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-dialyzer-plt-
 
-      - name: Run formatter check
+      # Install dependencies
+      - name: Install dependencies
+        run: mix deps.get
+
+      # Run formatter check
+      - name: Check formatting
         run: mix format --check-formatted
 
-      - name: Run Credo for linting
+      # Run Credo for linting
+      - name: Run Credo
         run: mix credo
 
-      - name: Run Dialyzer for type checking
+      # Run Dialyzer for type checking
+      - name: Run Dialyzer
         run: mix dialyzer
 
+      # Set up the database
       - name: Set up the database
-        run: mix ecto.migrate
+        run: mix ecto.create && mix ecto.migrate
 
+      # Compile dependencies
+      - name: Compile dependencies
+        run: mix deps.compile
+
+      # Compile the application
+      - name: Compile application
+        run: mix compile
+
+      # Run tests
       - name: Run tests
         run: mix test
