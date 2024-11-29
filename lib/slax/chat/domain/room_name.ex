@@ -21,7 +21,7 @@ defmodule Slax.Chat.Room.Domain.RoomName do
 
     random_id = Enum.random(0..@max_allowed_rooms)
 
-    if length(marvel_heroes_names) == 0 do
+    if Enum.empty?(marvel_heroes_names) do
       {:error, "No names available for chat room generation"}
     else
       hero_picked = Enum.random(marvel_heroes_names)
