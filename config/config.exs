@@ -7,8 +7,8 @@
 # General application configuration
 import Config
 
-
-config :slax, ecto_repos: [Slax.Repo],
+config :slax,
+  ecto_repos: [Slax.Repo],
   username: System.get_env("DATABASE_USERNAME") || "set-your-username-in-dotenv-file",
   password: System.get_env("DATABASE_PASSWORD") || "set-your-password-in-dotenv-file",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
