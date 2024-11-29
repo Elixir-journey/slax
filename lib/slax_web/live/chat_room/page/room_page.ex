@@ -22,7 +22,7 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
               <%= "You are among #{@chat_room_entity.user_connected_count - 1} users connected" %>
             </div>
           <% else %>
-            <div>No one else is connected here except for you 🥲 </div>
+            <div>No one else is connected here except for you 🥲</div>
           <% end %>
         </div>
         """

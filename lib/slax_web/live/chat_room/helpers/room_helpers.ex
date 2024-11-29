@@ -39,11 +39,13 @@ defmodule SlaxWeb.Live.ChatRoom.Helpers.Room do
       {:error, "Invalid input: max_rooms_supported must be a positive number"}
 
   """
-  def build_chat_room(max_rooms_supported) when is_number(max_rooms_supported) and max_rooms_supported > 0 do
+  def build_chat_room(max_rooms_supported)
+      when is_number(max_rooms_supported) and max_rooms_supported > 0 do
     room_id = Enum.random(0..max_rooms_supported)
     room_name = generate_room_name_random(room_id)
 
-    {:ok, %Room{room_id: room_id, room_name: room_name, user_connected_count: @initial_users_in_room}}
+    {:ok,
+     %Room{room_id: room_id, room_name: room_name, user_connected_count: @initial_users_in_room}}
   end
 
   # Error handling for invalid inputs (non-numbers or non-positive numbers)
@@ -66,7 +68,16 @@ defmodule SlaxWeb.Live.ChatRoom.Helpers.Room do
   def anyone_connected?(chat_room), do: chat_room.user_connected_count > 0
 
   defp generate_room_name_random(room_id) do
-    marvel_heroes_names = ["Iron man", "Spider-man", "Hawkeye", "Nick Furry", "Nebula", "Ant-man", "Phoenix", "Wanda"]
+    marvel_heroes_names = [
+      "Iron man",
+      "Spider-man",
+      "Hawkeye",
+      "Nick Furry",
+      "Nebula",
+      "Ant-man",
+      "Phoenix",
+      "Wanda"
+    ]
 
     # Ensure the list is not empty before attempting random selection
     if length(marvel_heroes_names) == 0 do
