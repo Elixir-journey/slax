@@ -36,7 +36,9 @@ config :slax, dev_routes: true
 config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
+
 config :phoenix_live_view,
   debug_heex_annotations: true,
   enable_expensive_runtime_checks: true
+
 config :swoosh, :api_client, false
