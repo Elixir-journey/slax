@@ -1,0 +1,26 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "deploy": "esbuild app.js --bundle --minify --sourcemap --outdir=../priv/static/assets",
+    "watch": "esbuild app.js --bundle --watch --sourcemap --outdir=../priv/static/assets"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.24.2",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.0"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.8",
+    "phoenix": "^1.7.18",
+    "phoenix_html": "^4.2.0",
+    "phoenix_live_view": "^1.0.2",
+    "topbar": "^3.0.0"
+  }
+}

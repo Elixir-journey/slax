@@ -1,0 +1,35 @@
+# Base image
+FROM elixir:1.18-otp-27-alpine
+
+# Install system dependencies
+RUN apk add --no-cache \
+    build-base \
+    inotify-tools \
+    postgresql-client \
+    nodejs \
+    npm \
+    bash \
+    git \
+    curl
+
+# Set working directory
+WORKDIR /app
+
+# Install Hex and Rebar
+RUN mix local.hex --force && mix local.rebar --force
+
+# Install project dependencies
+COPY mix.exs mix.lock ./
+RUN mix deps.get
+
+# Copy the application files
+COPY . .
+
+# Install npm dependencies
+RUN cd assets && npm install
+
+# Expose the Phoenix LiveView port
+EXPOSE 4000
+
+# Default command for development
+CMD ["mix", "phx.server"]
