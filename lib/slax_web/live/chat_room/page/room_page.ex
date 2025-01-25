@@ -1,4 +1,6 @@
 defmodule SlaxWeb.Live.ChatRoom.Page do
+  @moduledoc false
+
   use SlaxWeb, :live_view
 
   alias Slax.Chat.Room
@@ -20,10 +22,12 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
   end
 
   defp assign_chat_room(socket) do
-    with room when not is_nil(room) <- ChatRoom.get_first_room() do
-      assign(socket, :slax_room, room)
+    room = ChatRoom.fetch_one_room()
+
+    if is_nil(room) do
+      assign(socket, :slax_room, @default_chat_room)
     else
-      _ -> assign(socket, :slax_room, @default_chat_room)
+      assign(socket, :slax_room, room)
     end
   end
 
