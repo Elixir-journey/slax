@@ -9,15 +9,15 @@ on:
             - main
 
 jobs:
-    build:
+    build_and_test:
         runs-on: ubuntu-latest
         services:
             postgres:
                 image: postgres:15
                 env:
-                    POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-                    POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-                    POSTGRES_DB: ${{ secrets.DB_NAME }}
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: slax_test
                 ports:
                     - 5432:5432
         env:
@@ -44,6 +44,10 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-mix-
 
+            # Install dependencies
+            - name: Install dependencies
+              run: mix deps.get
+
             # Cache Dialyzer PLT files
             - name: Cache Dialyzer PLT
               uses: actions/cache@v3
@@ -53,9 +57,9 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-dialyzer-plt-
 
-            # Install dependencies
-            - name: Install dependencies
-              run: mix deps.get
+            # Set up the database
+            - name: Set up the database
+              run: mix ecto.create && mix ecto.migrate
 
             # Run formatter check
             - name: Check formatting
@@ -63,24 +67,18 @@ jobs:
 
             # Run Credo for linting
             - name: Run Credo
-              run: mix credo
+              run: mix credo --strict
+
+            # Run Sobelow for security analysis
+            - name: Run Sobelow
+              run: mix sobelow --config
 
             # Run Dialyzer for type checking
             - name: Run Dialyzer
               run: mix dialyzer
-
-            # Set up the database
-            - name: Set up the database
-              run: mix ecto.create && mix ecto.migrate
-
-            # Compile dependencies
-            - name: Compile dependencies
-              run: mix deps.compile
-
-            # Compile the application
-            - name: Compile application
-              run: mix compile
+              env:
+                  MIX_ENV: dev
 
             # Run tests
             - name: Run tests
-              run: mix test
+              run: mix test --color
