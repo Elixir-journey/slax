@@ -43,7 +43,7 @@ defmodule SlaxWeb do
         layouts: [html: SlaxWeb.Layouts]
 
       import Plug.Conn
-      import SlaxWeb.Gettext
+      use Gettext, backend: SlaxWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -85,7 +85,7 @@ defmodule SlaxWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import SlaxWeb.CoreComponents
-      import SlaxWeb.Gettext
+      use Gettext, backend: SlaxWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

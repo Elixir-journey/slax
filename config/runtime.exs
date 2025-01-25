@@ -31,12 +31,6 @@ if File.exists?(".env") do
   end)
 end
 
-IO.inspect(System.get_env("DATABASE_USERNAME"), label: "DATABASE_USERNAME")
-IO.inspect(System.get_env("DATABASE_PASSWORD"), label: "DATABASE_PASSWORD")
-IO.inspect(System.get_env("DATABASE_NAME"), label: "DATABASE_NAME")
-IO.inspect(System.get_env("DATABASE_HOST"), label: "DATABASE_HOST")
-IO.inspect(System.get_env("DATABASE_PORT"), label: "DATABASE_PORT")
-
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
