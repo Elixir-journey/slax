@@ -1,0 +1,13 @@
+# Ignore files and directories that aren't needed in the container
+.git
+_build
+deps
+node_modules
+test
+*.md
+docker-compose.*
+.env
+
+# Allow mix.exs and mix.lock explicitly
+!mix.exs
+!mix.lock

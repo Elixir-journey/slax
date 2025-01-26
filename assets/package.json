@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "tailwind.config.js",
   "scripts": {
-    "deploy": "esbuild app.js --bundle --minify --sourcemap --outdir=../priv/static/assets",
+    "deploy": "esbuild js/app.js --bundle --minify --sourcemap --outdir=../priv/static/assets",
     "watch": "esbuild app.js --bundle --watch --sourcemap --outdir=../priv/static/assets"
   },
   "keywords": [],
