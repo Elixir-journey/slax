@@ -1,0 +1,36 @@
+FROM node:20-slim AS node-build
+
+WORKDIR /app/assets
+
+# 1. Copy package.json and lock file, then install dependencies
+COPY assets/package.json assets/package-lock.json ./
+RUN npm install
+
+# 2. Copy all other assets (including vendor/topbar.js)
+COPY assets/ ./
+
+# 3. Build static assets
+RUN npx esbuild js/app.js --bundle --minify --sourcemap --outdir=../priv/static/assets
+
+# Stage 2: Elixir Build Stage
+FROM elixir:1.18-otp-27-alpine AS build
+
+RUN apk add --no-cache build-base git npm bash curl
+WORKDIR /app
+RUN mix local.hex --force && mix local.rebar --force
+COPY mix.exs mix.lock ./
+RUN mix deps.get --only prod
+COPY . .
+RUN mix deps.compile
+# Copy built assets from Node.js stage
+COPY --from=node-build /app/assets ../priv/static/assets
+RUN mix phx.digest
+
+# Stage 3: Minimal Runtime Container
+FROM gcr.io/distroless/base-debian11:latest
+
+WORKDIR /app
+COPY --from=build /app/_build/prod/rel/slax ./
+USER nobody:nogroup
+EXPOSE 4000
+CMD ["bin/slax", "start"]
