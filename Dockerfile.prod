@@ -4,13 +4,15 @@ WORKDIR /app/assets
 
 # 1. Copy package.json and lock file, then install dependencies
 COPY assets/package.json assets/package-lock.json ./
-RUN npm install
+
+# Install dependencies including esbuild for the correct platform
+RUN npm install --force && npm install esbuild-linux-64 --force
 
 # 2. Copy all other assets (including vendor/topbar.js)
 COPY assets/ ./
 
-# 3. Build static assets
-RUN npx esbuild js/app.js --bundle --minify --sourcemap --outdir=../priv/static/assets
+# 3. Build static assets using the correct binary
+RUN npx esbuild-linux-64 js/app.js --bundle --minify --sourcemap --outdir=../priv/static/assets
 
 # Stage 2: Elixir Build Stage
 FROM elixir:1.18-otp-27-alpine AS build
