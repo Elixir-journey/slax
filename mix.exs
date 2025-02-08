@@ -75,7 +75,9 @@ defmodule Slax.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      build: ["deps.get", "compile", "credo", "dialyzer"],
+      update_dependencies: ["deps.get", "deps.update --all"],
+      verify_elixir: ["format", "credo", "dialyzer"],
+      build_app: ["update_dependencies", "ecto.reset", "compile", "verify_elixir", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
