@@ -31,5 +31,11 @@ RUN cd assets && npm install
 # Expose the Phoenix LiveView port
 EXPOSE 4000
 
+# Copy the entrypoint script and ensure it is executable
+COPY scripts/entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
 # Default command for development
 CMD ["mix", "phx.server"]
