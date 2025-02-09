@@ -77,7 +77,15 @@ defmodule Slax.MixProject do
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       update_dependencies: ["deps.get", "deps.update --all"],
       verify_elixir: ["format", "credo", "dialyzer"],
-      build_app: ["update_dependencies", "ecto.reset", "compile", "verify_elixir", "assets.build"],
+      build_backend: ["deps.get", "format", "compile"],
+      build_app: ["build_backend", "credo", "assets.build"],
+      rebuild_app_with_updates: [
+        "update_dependencies",
+        "ecto.reset",
+        "compile",
+        "verify_elixir",
+        "assets.build"
+      ],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
