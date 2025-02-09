@@ -4,7 +4,10 @@ set -e
 echo "=== Running database migrations ==="
 mix ecto.migrate
 
+echo "=== Compiling application ==="
+mix compile --force  # Ensure the Mix task is available
+
 echo "=== Running database seed ==="
-mix db.seed
+mix db_seed
 
 exec "$@"
