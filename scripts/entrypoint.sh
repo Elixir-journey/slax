@@ -8,6 +8,6 @@ echo "=== Compiling application ==="
 mix compile --force  # Ensure the Mix task is available
 
 echo "=== Running database seed ==="
-mix db_seed
+mix run priv/repo/seeds.exs
 
 exec "$@"
