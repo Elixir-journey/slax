@@ -9,7 +9,10 @@ defmodule Slax.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        plt_add_apps: [:mix]
+      ]
     ]
   end
 
@@ -62,7 +65,8 @@ defmodule Slax.MixProject do
       {:dotenv, "~> 3.0.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
-      {:sobelow, "~> 0.13.0"}
+      {:sobelow, "~> 0.13.0"},
+      {:faker, "~> 0.18.0"}
     ]
   end
 
@@ -77,7 +81,15 @@ defmodule Slax.MixProject do
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       update_dependencies: ["deps.get", "deps.update --all"],
       verify_elixir: ["format", "credo", "dialyzer"],
-      build_app: ["update_dependencies", "ecto.reset", "compile", "verify_elixir", "assets.build"],
+      build_backend: ["deps.get", "format", "compile"],
+      build_app: ["build_backend", "credo", "assets.build"],
+      rebuild_app_with_updates: [
+        "update_dependencies",
+        "ecto.reset",
+        "compile",
+        "verify_elixir",
+        "assets.build"
+      ],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],

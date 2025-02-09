@@ -2,6 +2,7 @@ defmodule Slax.Chat.Room do
   @moduledoc false
 
   use Ecto.Schema
+
   import Ecto.Changeset
 
   # By default, a schema will automatically generate a primary key which is named id and of type :integer.
@@ -17,6 +18,16 @@ defmodule Slax.Chat.Room do
 
     timestamps()
   end
+
+  @typedoc "Represents a chat room."
+  @type t :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          name: String.t(),
+          topic: String.t(),
+          inserted_at: NaiveDateTime.t() | nil,
+          updated_at: NaiveDateTime.t() | nil
+        }
 
   @doc false
   def changeset(room, attrs) do
