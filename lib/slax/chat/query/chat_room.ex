@@ -6,7 +6,7 @@ defmodule Slax.Chat.Room.Query.ChatRoom do
   alias Slax.Repo
   alias Slax.Chat.Room
 
-  @spec fetch_one_room :: %Room{} | nil
+  @spec fetch_one_room :: Room.t() | nil
   def fetch_one_room do
     query = from u in Room, limit: 1
     Repo.one(query)
