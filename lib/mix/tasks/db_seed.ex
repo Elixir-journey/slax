@@ -10,10 +10,8 @@ defmodule Mix.Tasks.DbSeed do
 
   @room_count 10
 
+  @impl Mix.Task
   def run(_args) do
-    # Ensures the application is started
-    Mix.Task.run("app.start")
-
     if Repo.aggregate(Room, :count, :id) == 0 do
       IO.puts("=== Seeding initial chat rooms ===")
 
