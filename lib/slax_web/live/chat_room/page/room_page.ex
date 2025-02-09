@@ -6,22 +6,28 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
   alias Slax.Chat.Room
   alias Slax.Repo
 
-  @default_chat_room %Room{name: "Unknown", topic: "No topic"}
-
   @spec mount(any(), any(), any()) :: {:ok, any()}
   @doc """
   LiveView entrypoint, called twice: once on initial page load and again on websocket connection.
   - Fetches the first chat room and assigns it to `:slax_room`.
   """
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     socket
-    |> assign_chat_room()
+    |> assign_chat_room(params)
     |> SlaxWeb.LiveViewHelpers.ok()
   end
 
-  defp assign_chat_room(socket) do
+  defp assign_chat_room(socket, params) do
     rooms = Repo.all(Room)
-    room = List.first(rooms) || @default_chat_room
+
+    room =
+      case Map.fetch(params, "id") do
+        {:ok, id} ->
+          %Room{} = Enum.find(rooms, &(to_string(&1.id) == id))
+
+        :error ->
+          List.first(rooms)
+      end
 
     socket
     |> assign(room: room)
@@ -81,7 +87,7 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
         "flex items-center h-8 text-sm pl-8 pr-3",
         (@active && "bg-slate-300") || "hover:bg-slate-300"
       ]}
-      href="#"
+      href={~p"/rooms/#{@room}"}
     >
       <.icon name="hero-hashtag" class="h-4 w-4" />
       <span class={["ml-2 leading-none", @active && "font-bold"]}>
