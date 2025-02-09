@@ -62,7 +62,8 @@ defmodule Slax.MixProject do
       {:dotenv, "~> 3.0.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
-      {:sobelow, "~> 0.13.0"}
+      {:sobelow, "~> 0.13.0"},
+      {:faker, "~> 0.18.0"}
     ]
   end
 
