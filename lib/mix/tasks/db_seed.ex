@@ -17,16 +17,14 @@ defmodule Mix.Tasks.DbSeed do
     if Repo.aggregate(Room, :count, :id) == 0 do
       IO.puts("=== Seeding initial chat rooms ===")
 
-      num_rooms = Enum.random(@room_count)
-
-      for _ <- 1..num_rooms do
+      for _ <- 1..@room_count do
         Repo.insert!(%Room{
           name: Lorem.word() |> String.capitalize(),
           topic: Lorem.sentence()
         })
       end
 
-      IO.puts("=== Seeded #{num_rooms} chat rooms ===")
+      IO.puts("=== Seeded #{@room_count} chat rooms ===")
     else
       IO.puts("=== Database already has chat rooms, skipping seeding ===")
     end
