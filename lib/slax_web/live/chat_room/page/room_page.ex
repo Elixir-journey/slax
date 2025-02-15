@@ -30,7 +30,7 @@ defmodule SlaxWeb.Live.ChatRoom.Page do
       end
 
     socket
-    |> assign(room: room)
+    |> assign(room: room || %Room{name: "No Room", topic: ""})
     |> assign(rooms: rooms)
     |> assign(hide_topic?: false)
   end
